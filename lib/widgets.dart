@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:onlineshop/header.dart';
+import 'package:onlineshop/productPage.dart';
 
 Widget buildBanner() {
   return Padding(
@@ -26,31 +27,36 @@ Widget buildBanner() {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Bose Home Speaker',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600),
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  'USD 214',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400),
-                ),
-              ],
+            Expanded(flex: 6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Bose Home Speaker',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    'USD 214',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
             ),
-            Container(
-              height: 75,
-              child: Image.asset('assets/images/a.png'),
+            Expanded(flex: 4,
+              child: Container(
+
+                height: 75,
+                child: Image.asset('assets/images/a.png',),
+              ),
             )
 
           ]),
@@ -75,7 +81,7 @@ Widget buildHeader() {
 GestureDetector buildNavigationBar( {required String text,required IconData icon, Widget? widget , BuildContext? context}) {
   return GestureDetector(
     onTap: (){
-      Navigator.push(context!, MaterialPageRoute(builder:(context){return widget!;}));
+      Navigator.push(context!, MaterialPageRoute(builder:(context)=>widget!));
     },
     child: Column(
       children: [
@@ -105,15 +111,15 @@ Container buildSalesItem({required double deviceWidth,required String catagori,r
           padding: EdgeInsets.all (4),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular (2),
-              color: Color (0xFFE0ECF8)), // BoxDecoration
-          child: Text(
+              color: Color (0xFFE0ECF8)),
+              child: Text(
             discountRate,
             style:
             TextStyle(color: Color (0xFF1F53E4), fontSize: 12),
           ),
         ),
         SizedBox(height: 22,),
-        Container(child: Image.network(imageUrl,fit: BoxFit.scaleDown,)),
+        Container(height: 150 ,child: Image.network(imageUrl,fit: BoxFit.cover,)),
         SizedBox(height: 22,),
         Center(
           child: Text(catagori,
@@ -123,4 +129,61 @@ Container buildSalesItem({required double deviceWidth,required String catagori,r
       ],
     ), // Column
   );
+}
+
+Widget buildNavIcon({required IconData icon,required bool active}){
+  return Icon(icon, size: 30, color: Color(active?0xFF0001FC:0xFF0A1034));
+}
+
+GestureDetector buildCatagories({required String text,required BuildContext context}) {
+  return GestureDetector(
+    onTap: (){
+      Navigator.push(context, MaterialPageRoute(builder: (context) {return ProductPage();}));
+    },
+    child: Container(
+      margin: EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.all (24),
+      width: double.infinity,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular (6),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity (0.25),
+                blurRadius: 4,
+                offset: Offset(0, 4)), // BoxShadow
+          ]), // BoxDecoration
+      child: Text(
+        text,
+        style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Color (0xFF0A1034)), // TextStyle
+      ), // Text
+    ),
+  );
+}
+
+Widget buildPagesHeader({required String? header,List<String>? catagories,required BuildContext context}){
+  final headerResult = header == null ? 'default' : header;
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+        Header(context,header),
+      // kategoriler
+      buildCatagoriList(catagories: catagories,header: header,context: context ),
+    ],
+  );
+}
+
+Widget buildCatagoriList({required List<String>? catagories,required String? header,required BuildContext context}) {
+  if(catagories != null && catagories.isNotEmpty) {
+    return Expanded(
+      child: ListView(
+        children: catagories.map((String title) => buildCatagories(text: title,context: context),).toList(),
+      ),
+    );
+  } else {
+    return Column();
+  }
 }
