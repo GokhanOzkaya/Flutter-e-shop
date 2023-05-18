@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:onlineshop/components/label.dart';
 import 'package:onlineshop/header.dart';
 import 'package:onlineshop/productPage.dart';
 
@@ -107,17 +110,7 @@ Container buildSalesItem({required double deviceWidth,required String catagori,r
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: EdgeInsets.all (4),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular (2),
-              color: Color (0xFFE0ECF8)),
-              child: Text(
-            discountRate,
-            style:
-            TextStyle(color: Color (0xFF1F53E4), fontSize: 12),
-          ),
-        ),
+       label(discountRate:'%50'),
         SizedBox(height: 22,),
         Container(height: 150 ,child: Image.network(imageUrl,fit: BoxFit.cover,)),
         SizedBox(height: 22,),
@@ -138,7 +131,7 @@ Widget buildNavIcon({required IconData icon,required bool active}){
 GestureDetector buildCatagories({required String text,required BuildContext context}) {
   return GestureDetector(
     onTap: (){
-      Navigator.push(context, MaterialPageRoute(builder: (context) {return ProductPage();}));
+      Navigator.push(context, MaterialPageRoute(builder: (context) {return ProductPage(productTitle: text);}));
     },
     child: Container(
       margin: EdgeInsets.only(bottom: 16),
@@ -165,7 +158,7 @@ GestureDetector buildCatagories({required String text,required BuildContext cont
 }
 
 Widget buildPagesHeader({required String? header,List<String>? catagories,required BuildContext context}){
-  final headerResult = header == null ? 'default' : header;
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -186,4 +179,39 @@ Widget buildCatagoriList({required List<String>? catagories,required String? hea
   } else {
     return Column();
   }
+}
+Widget colorPicker({Color? color, required bool isSelected , required Function onTap}){
+  return
+    Column(
+      children: [
+        GestureDetector(
+          onTap: onTap as Function(),
+          child: Container(
+          height: 20,
+          width: 20,
+          decoration: (BoxDecoration(shape: BoxShape.circle,color: color,border: Border.all(width: isSelected ? 3 : 0))),
+          ),
+        ),
+        SizedBox(width: 25,),
+      ],
+    );
+}
+Widget capaties ({required bool isActive ,required int option , required Function onTap}) {
+  return
+      Column(
+        children: [
+          GestureDetector(
+            onTap: onTap as Function(),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 5),
+              child: Text('$option gb',
+                style: TextStyle(
+                color: isActive ? Color(0xFF0001FC) : Color(0xFF6F7972),
+                fontSize: isActive ? 23 : 19 ,
+              ),
+              ),
+            ),
+          ),
+        ],
+      );
 }

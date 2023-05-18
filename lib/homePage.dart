@@ -18,7 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.only(left: 16,right: 16,bottom: 55),
                 child: ListView(children: [
                   //BASLIK
                   buildHeader(),
@@ -32,10 +32,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [
                         //İlk eleman
                         buildNavigationBar(
-                            icon: Icons.menu_outlined, text: 'Catagories',context: context , widget: CategoriesPage()),
+                            icon: Icons.menu_outlined, text: 'Catagories',context: context , widget: CategoriesPage(catagoryTitle: 'Categories',)),
                         buildNavigationBar(
-                            icon: Icons.favorite_outline_outlined,
-                            text: 'Favories',context: context , widget: CategoriesPage()),
+                            icon: Icons.favorite_outline_outlined,text: 'Favories',context: context, widget: CategoriesPage(catagoryTitle: 'Favorites',)),
                         buildNavigationBar(
                             icon: Icons.show_chart, text: 'Best Sellings'),
                         buildNavigationBar(
@@ -59,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 20,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

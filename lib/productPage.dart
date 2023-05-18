@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:onlineshop/components/bottomNavigationBar.dart';
-import 'package:onlineshop/header.dart';
+import 'package:onlineshop/product.detail.dart';
 import 'package:onlineshop/widgets.dart';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({Key? key}) : super(key: key);
+  String productTitle;
+  ProductPage({required this.productTitle});
 
   @override
   State<ProductPage> createState() => _ProductPageState();
@@ -12,9 +13,9 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   List<Map> products =[
     {"name":"Excalibur","photoUrl":"https://pngimg.com/uploads/laptop/laptop_PNG101774.png","price":"999"},
-    {"name":"Excalibur 1","photoUrl":"https://pngimg.com/uploads/laptop/laptop_PNG101774.png","price":"999"},
+    {"name":"Excalibur 1","photoUrl":"https://cdn.pixabay.com/photo/2013/07/12/15/04/monitor-149362_960_720.png","price":"999"},
     {"name":"Excalibur 2","photoUrl":"https://pngimg.com/uploads/laptop/laptop_PNG101774.png","price":"999"},
-    {"name":"Excalibur 3","photoUrl":"https://pngimg.com/uploads/laptop/laptop_PNG101774.png","price":"999"},
+    {"name":"Excalibur 3","photoUrl":"https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_87300487/mobile_786_587_png/APPLE-iPhone-13-128-GB-Ak%C4%B1ll%C4%B1-Telefon-Starlight-MLPG3TU-A","price":"999"},
     {"name":"Excalibur 5","photoUrl":"https://pngimg.com/uploads/laptop/laptop_PNG101774.png","price":"999"},
     {"name":"Excalibur 6","photoUrl":"https://pngimg.com/uploads/laptop/laptop_PNG101774.png","price":"999"},
     {"name":"Excalibur 7","photoUrl":"https://pngimg.com/uploads/laptop/laptop_PNG101774.png","price":"999"},
@@ -32,15 +33,15 @@ class _ProductPageState extends State<ProductPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                 //header1
-                  buildPagesHeader(header:'Asus From Print', context: context,catagories: []),
+                  buildPagesHeader(header:widget.productTitle, context: context,),
                 //content
               Expanded(
                 child: GridView.count(
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
                   crossAxisCount: 2,
                   children: products.map((product) {
-                    return buildContent(product["name"], product["photoUrl"], product["price"]);
+                    return buildContent(product["name"], product["photoUrl"], product["price"],context);
                   }).toList(),
                 ),
               ),
@@ -56,9 +57,11 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 }
-Widget buildContent(String title, String photoUrl, String price) {
+Widget buildContent(String title, String photoUrl, String price,context) {
   return GestureDetector(
-    onTap: (){},
+    onTap: (){
+      Navigator.push(context, MaterialPageRoute(builder: (context){return ProductDetailPage(productTitle: title,);}));
+    },
     child: Container(
       padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
       decoration: BoxDecoration(
