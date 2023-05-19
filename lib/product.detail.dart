@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:onlineshop/cart.dart';
+import 'package:onlineshop/components/bottomNavigationBar.dart';
 import 'package:onlineshop/components/label.dart';
 import 'package:onlineshop/header.dart';
 import 'package:onlineshop/widgets.dart';
@@ -39,8 +41,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
+                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Header(context, widget.productTitle),
                   SizedBox(
@@ -48,7 +50,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: label(discountRate: 'New'),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        label(discountRate: 'New'),
+                      ],
+                    ),
                   ),
 
                   Center(
@@ -101,14 +108,34 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           option: options,
                           onTap: () {
                             setState(() {
-                              selectedOption=options;
+                              selectedOption = options;
                             });
                           }))
                     ],
-                  ) // Row
+                  ),
+                  SizedBox(
+                    height: 32,
+                  ),
+                  Container(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF0038FC)),
+                        ),
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context){return cart(title: widget.productTitle,color: selectedColor,imageUrl:"https://cdn.pixabay.com/photo/2013/07/12/15/04/monitor-149362_960_720.png" ,option: selectedOption,price: 112,);} ));
+                        },
+                        child:
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15.0),
+                          child: Text('Add to cart',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600,fontSize: 22),),
+                        ),
+                      ),
+                  ),
                 ],
               ),
             ),
+            buildBottomNavigationBar("shop"),
           ],
         ),
       ),

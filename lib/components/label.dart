@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 Widget label ({required String discountRate}) {
   return
     Container(
+
     padding: EdgeInsets.all (4),
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular (2),
