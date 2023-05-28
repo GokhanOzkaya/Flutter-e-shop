@@ -1,3 +1,4 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:onlineshop/catagories.dart';
 import 'package:onlineshop/components/bottomNavigationBar.dart';
@@ -45,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   SizedBox(
                     height: 40,
                   ),
+
                   //SALES
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -107,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ]),
               ),
               // BOTTOM NAVIGATION BAR
-              buildBottomNavigationBar("home"),
+              buildBottomNavigationBar("home",context),
             ],
           ),
         ));

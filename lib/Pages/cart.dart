@@ -3,18 +3,19 @@ import 'package:onlineshop/components/bottomNavigationBar.dart';
 import 'package:onlineshop/header.dart';
 
 class cart extends StatefulWidget {
-  late String title;
-  late String imageUrl;
-  late int price;
-  late Color color;
-  late int option;
+  String title;
+  String imageUrl;
+  int price;
+  Color color;
+  int option;
 
-  cart(
-      {required this.title,
-      required this.imageUrl,
-      required this.price,
-      required this.color,
-      required this.option});
+  cart({
+    this.title = '',
+    this.imageUrl = '',
+    this.price = 0,
+    this.color = Colors.transparent,
+    this.option = 0,
+  });
 
   @override
   State<cart> createState() => _cartState();
@@ -169,7 +170,7 @@ class _cartState extends State<cart> {
                 ],
               ),
             ),
-            buildBottomNavigationBar('profile')
+            buildBottomNavigationBar('cart',context)
           ],
         ),
       ),

@@ -50,7 +50,7 @@ class _ProductPageState extends State<ProductPage> {
                 ],
               ),
             ),
-            buildBottomNavigationBar("search"),
+            buildBottomNavigationBar("search",context),
           ],
         ),
       ),
@@ -60,7 +60,7 @@ class _ProductPageState extends State<ProductPage> {
 Widget buildContent(String title, String photoUrl, String price,context) {
   return GestureDetector(
     onTap: (){
-      Navigator.push(context, MaterialPageRoute(builder: (context){return ProductDetailPage(productTitle: title,);}));
+      Navigator.push(context, MaterialPageRoute(builder: (context){return ProductDetailPage(productTitle: title,productImageUrl: photoUrl,);}));
     },
     child: Container(
       padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onlineshop/cart.dart';
+import 'package:onlineshop/Pages/cart.dart';
 import 'package:onlineshop/components/bottomNavigationBar.dart';
 import 'package:onlineshop/components/label.dart';
 import 'package:onlineshop/header.dart';
@@ -7,8 +7,9 @@ import 'package:onlineshop/widgets.dart';
 
 class ProductDetailPage extends StatefulWidget {
   String productTitle;
+  String productImageUrl;
 
-  ProductDetailPage({required this.productTitle});
+  ProductDetailPage({required this.productTitle,required this.productImageUrl});
 
   @override
   _ProductDetailPageState createState() => _ProductDetailPageState();
@@ -62,7 +63,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       child: Container(
                           height: 250,
                           child: Image.network(
-                            "https://cdn.pixabay.com/photo/2013/07/12/15/04/monitor-149362_960_720.png",
+                            widget.productImageUrl,
+                            //"https://cdn.pixabay.com/photo/2013/07/12/15/04/monitor-149362_960_720.png",
                             fit: BoxFit.scaleDown,
                           ))),
                   // RENK SEÇENEKLERİ
@@ -135,7 +137,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ],
               ),
             ),
-            buildBottomNavigationBar("shop"),
+            buildBottomNavigationBar("shop",context),
           ],
         ),
       ),

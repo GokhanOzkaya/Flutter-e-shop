@@ -3,7 +3,7 @@ import 'package:onlineshop/components/bottomNavigationBar.dart';
 import 'package:onlineshop/widgets.dart';
 
 class CategoriesPage extends StatelessWidget {
-  String catagoryTitle;
+  String? catagoryTitle;
   CategoriesPage({required this.catagoryTitle});
   List<String> catagories = ['Asus','Casper','Monster'];
   @override
@@ -14,9 +14,9 @@ class CategoriesPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: buildPagesHeader(context: context,header: catagoryTitle,catagories:catagories,),
+                child: buildPagesHeader(context: context,header: catagoryTitle ,catagories:catagories,),
             ),
-            buildBottomNavigationBar("shop"),
+            buildBottomNavigationBar("shop",context),
           ],
         ),
       ),
