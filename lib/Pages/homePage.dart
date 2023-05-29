@@ -1,8 +1,15 @@
 import 'package:card_swiper/card_swiper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:onlineshop/catagories.dart';
 import 'package:onlineshop/components/bottomNavigationBar.dart';
+import 'package:onlineshop/main.dart';
+import 'package:onlineshop/screens/login_screen/login_screen.dart';
+import 'package:onlineshop/utilities/sing_google.dart';
 import 'package:onlineshop/widgets.dart';
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
@@ -11,10 +18,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+
   @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width - 32;
     return Scaffold(
+        appBar: AppBar(title: Text('Appbar')),
+        key: _scaffoldKey,
+        drawer: MyDrawer(),
         body: SafeArea(
           child: Stack(
             children: [
@@ -23,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: ListView(children: [
                   //BASLIK
                   buildHeader(),
+
                   //BANNER
                   buildBanner(),
                   //BUTONLAR
@@ -112,6 +127,71 @@ class _MyHomePageState extends State<MyHomePage> {
               buildBottomNavigationBar("home",context),
             ],
           ),
-        ));
+        )
+    );
+  }
+}
+
+
+
+class MyDrawer extends StatelessWidget {
+  const MyDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  FirebaseAuth.instance.currentUser!.displayName!,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
+                Text(
+                  FirebaseAuth.instance.currentUser!.email!,
+                ),
+              ],
+            ),
+          ),
+
+          ListTile(
+            leading: Icon(Icons.home),
+            title: Text('Home'),
+            onTap: () {
+              // Burada sayfanızın ana sayfasına yönlendirebilirsiniz.
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Çıkış Yap'),
+            onTap: ()  async {
+              // Burada ayarlar sayfanıza yönlendirebilirsiniz.
+               await signOutWithGoogle();
+               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()),);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Diğer'),
+            onTap: ()  async {
+              // Burada ayarlar sayfanıza yönlendirebilirsiniz.
+               await signOutWithGoogle();
+               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()),);
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

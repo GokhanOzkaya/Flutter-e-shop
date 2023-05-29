@@ -70,13 +70,18 @@ Widget buildBanner() {
 Widget buildHeader() {
   return Padding(
     padding: const EdgeInsets.only(top: 20.0),
-    child: Text(
-      'Home',
-      style: TextStyle(
-          fontSize: 34,
-          color: Color(0xFF0A1034),
-          fontWeight: FontWeight.bold),
-      textAlign: TextAlign.left,
+    child: Row(
+      children: [
+
+        Text(
+          'Home',
+          style: TextStyle(
+              fontSize: 34,
+              color: Color(0xFF0A1034),
+              fontWeight: FontWeight.bold),
+          textAlign: TextAlign.left,
+        ),
+      ],
     ),
   );
 }
