@@ -1,14 +1,18 @@
 import 'package:card_swiper/card_swiper.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:onlineshop/Pages/SplashScreen.dart';
+import 'package:onlineshop/Pages/login_page.dart';
 import 'package:onlineshop/catagories.dart';
 import 'package:onlineshop/components/bottomNavigationBar.dart';
 import 'package:onlineshop/main.dart';
-import 'package:onlineshop/screens/login_screen/login_screen.dart';
 import 'package:onlineshop/utilities/sing_google.dart';
 import 'package:onlineshop/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -18,28 +22,106 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  List<String> items = [
+    'https://img-teknosa-sap.mncdn.com/home/widget/widget_sunnytvkamp_230601.jpg',
+    'https://img-teknosa-sap.mncdn.com/home/widget/widget_hp_victuskamp_230530.jpg',
+    'https://img-teknosa-sap.mncdn.com/home/widget/widget_ssh_microsoftkamp_230529.jpg',
+    'https://img-teknosa-sap.mncdn.com/home/widget/widget_shazaprojeksiyon_230601.jpg',
+    'https://img-teknosa-sap.mncdn.com/home/widget/widget_neutronhavatemizleyicisi_230601.jpg',
+  ];
+
+  List<Map<String, dynamic>> markalar = [];
+  List<Map<String, dynamic>> modeller = [];
+
+  String markaAdi = '';
+  String markaLogo = '';
+
+  String modelAdi = '';
+  String modelFiyati = '';
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMarkaData();
+  }
+
+  Future<void> fetchMarkaData() async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('markalar').get();
+
+    if (snapshot.docs.isNotEmpty) {
+      for (var doc in snapshot.docs) {
+        Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+        String? markaAdi = data?['markaAdi']?.toString();
+        String? markaLogo = data?['markaLogo']?.toString();
+
+        markalar.add({
+          'markaAdi': markaAdi ?? '',
+          'markaLogo': markaLogo ?? '',
+        });
+      }
+
+      setState(() {
+        this.markalar = markalar;
+      });
+    } else {
+      print('Markalar bulunamadı.');
+    }
+  }
+
+
 
 
   @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width - 32;
     return Scaffold(
-        appBar: AppBar(title: Text('Appbar')),
         key: _scaffoldKey,
-        drawer: MyDrawer(),
         body: SafeArea(
           child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 16,right: 16,bottom: 55),
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 55),
                 child: ListView(children: [
                   //BASLIK
                   buildHeader(),
 
                   //BANNER
                   buildBanner(),
+
+                  //Carosuel
+                  CarouselSlider(
+                    items: items.map((item) {
+                      return Padding(
+                        padding: const EdgeInsets.all(7.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            item as String,
+                            fit: BoxFit.cover,
+                            width: deviceWidth,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    options: CarouselOptions(
+                      clipBehavior: Clip.antiAlias,
+                      height: 200,
+                      aspectRatio: 16 / 9,
+                      viewportFraction: 1,
+                      initialPage: 0,
+                      enableInfiniteScroll: true,
+                      reverse: false,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.easeInOut,
+                      scrollDirection: Axis.horizontal,
+                    ),
+                  ),
+
                   //BUTONLAR
                   Padding(
                     padding: const EdgeInsets.only(top: 48.0),
@@ -48,9 +130,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [
                         //İlk eleman
                         buildNavigationBar(
-                            icon: Icons.menu_outlined, text: 'Catagories',context: context , widget: CategoriesPage(catagoryTitle: 'Categories',)),
+                            icon: Icons.menu_outlined,
+                            text: 'Catagories',
+                            context: context,
+                            widget: CategoriesPage(
+                              catagoryTitle: 'Categories',
+                            )),
                         buildNavigationBar(
-                            icon: Icons.favorite_outline_outlined,text: 'Favories',context: context, widget: CategoriesPage(catagoryTitle: 'Favorites',)),
+                            icon: Icons.favorite_outline_outlined,
+                            text: 'Favories',
+                            context: context,
+                            widget: CategoriesPage(
+                              catagoryTitle: 'Favorites',
+                            )),
                         buildNavigationBar(
                             icon: Icons.show_chart, text: 'Best Sellings'),
                         buildNavigationBar(
@@ -63,6 +155,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
 
                   //SALES
+                  //Markalar
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Markalar',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF0A1034)),
+                      ),
+                    ],
+                  ),
+
+                  //Marka adı,Marka Logosu listelenecek ve tıklandığında o markanın katagori listesine gidece
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -75,123 +183,28 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 16,
-                      ),
-                      buildSalesItem(
-                        deviceWidth: deviceWidth,
-                        catagori: 'Smart Phones',
-                        discountRate: '%50',
-                        imageUrl:
-                        'https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_87300487/mobile_786_587_png/APPLE-iPhone-13-128-GB-Ak%C4%B1ll%C4%B1-Telefon-Starlight-MLPG3TU-A',
-                      ),
-                      buildSalesItem(
-                        deviceWidth: deviceWidth,
-                        catagori: 'Computers',
-                        discountRate: '%25',
-                        imageUrl:
-                        'https://cdn.pixabay.com/photo/2013/07/12/15/04/monitor-149362_960_720.png',
-                      ),
-                    ],
+                  SizedBox(
+                    height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 16,
-                      ),
-                      buildSalesItem(
+                  Wrap(
+                    children: markalar.map((marka) {
+                      String markaAdi = marka['markaAdi'];
+                      String markaLogo = marka['markaLogo'];
+                      return buildSalesItem(
+                        context: context,
                         deviceWidth: deviceWidth,
-                        catagori: 'Smart Phones',
+                        catagori: markaAdi,
                         discountRate: '%50',
-                        imageUrl:
-                        'https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_87300487/mobile_786_587_png/APPLE-iPhone-13-128-GB-Ak%C4%B1ll%C4%B1-Telefon-Starlight-MLPG3TU-A',
-                      ),
-                      buildSalesItem(
-                        deviceWidth: deviceWidth,
-                        catagori: 'Computers',
-                        discountRate: '%25',
-                        imageUrl:
-                        'https://cdn.pixabay.com/photo/2013/07/12/15/04/monitor-149362_960_720.png',
-                      ),
-                    ],
+                        imageUrl: markaLogo,
+                      );
+                    }).toList(),
                   ),
-                  //SALES İTEMS
                 ]),
               ),
               // BOTTOM NAVIGATION BAR
-              buildBottomNavigationBar("home",context),
+              buildBottomNavigationBar("home", context),
             ],
           ),
-        )
-    );
-  }
-}
-
-
-
-class MyDrawer extends StatelessWidget {
-  const MyDrawer({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  FirebaseAuth.instance.currentUser!.displayName!,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
-                ),
-                Text(
-                  FirebaseAuth.instance.currentUser!.email!,
-                ),
-              ],
-            ),
-          ),
-
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
-            onTap: () {
-              // Burada sayfanızın ana sayfasına yönlendirebilirsiniz.
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Çıkış Yap'),
-            onTap: ()  async {
-              // Burada ayarlar sayfanıza yönlendirebilirsiniz.
-               await signOutWithGoogle();
-               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()),);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Diğer'),
-            onTap: ()  async {
-              // Burada ayarlar sayfanıza yönlendirebilirsiniz.
-               await signOutWithGoogle();
-               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()),);
-            },
-          ),
-        ],
-      ),
-    );
+        ));
   }
 }

@@ -19,6 +19,7 @@ class _ProductPageState extends State<ProductPage> {
     {"name":"Excalibur 5","photoUrl":"https://pngimg.com/uploads/laptop/laptop_PNG101774.png","price":"999"},
     {"name":"Excalibur 6","photoUrl":"https://pngimg.com/uploads/laptop/laptop_PNG101774.png","price":"999"},
     {"name":"Excalibur 7","photoUrl":"https://pngimg.com/uploads/laptop/laptop_PNG101774.png","price":"999"},
+    {"name":"Excalibur 7","photoUrl":"https://pngimg.com/uploads/laptop/laptop_PNG101774.png","price":"999"},
   ];
 
   @override

@@ -1,6 +1,9 @@
-import 'dart:ffi';
+
+
+
 
 import 'package:flutter/material.dart';
+import 'package:onlineshop/Pages/deneme.dart';
 import 'package:onlineshop/components/label.dart';
 import 'package:onlineshop/header.dart';
 import 'package:onlineshop/productPage.dart';
@@ -108,24 +111,31 @@ GestureDetector buildNavigationBar( {required String text,required IconData icon
   );
 }
 
-Container buildSalesItem({required double deviceWidth,required String catagori,required String imageUrl,required String discountRate}) {
-  return Container(width: deviceWidth/2,
-    padding:
-    EdgeInsets.only (left: 12, top: 12, bottom: 21, right: 12),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-       label(discountRate:'%50'),
-        SizedBox(height: 22,),
-        Container(height: 150 ,child: Image.network(imageUrl,fit: BoxFit.cover,)),
-        SizedBox(height: 22,),
-        Center(
-          child: Text(catagori,
-              style: TextStyle(
-                  fontSize: 18, color: Color (0xFF0A1034))),
-        ),
-      ],
-    ), // Column
+GestureDetector buildSalesItem({ required BuildContext context,required double deviceWidth,required String catagori,required String imageUrl,required String discountRate,}) {
+  return GestureDetector(
+      onTap: (){
+        Navigator.push(context , MaterialPageRoute(builder: (context) {
+          return sirala();
+        },));
+      },
+      child: Container(width: deviceWidth/2,
+      padding:
+      EdgeInsets.only (left: 12, top: 12, bottom: 21, right: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+         label(discountRate:discountRate),
+          SizedBox(height: 22,),
+          Container(height: 150 ,child: Image.network(imageUrl,fit: BoxFit.cover,)),
+          SizedBox(height: 22,),
+          Center(
+            child: Text(catagori,
+                style: TextStyle(
+                    fontSize: 18, color: Color (0xFF0A1034))),
+          ),
+        ],
+      ), // Column
+    ),
   );
 }
 
